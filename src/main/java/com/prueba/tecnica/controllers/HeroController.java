@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,41 +23,39 @@ import org.springframework.web.bind.annotation.RestController;
 import com.prueba.tecnica.models.HeroEntity;
 import com.prueba.tecnica.repositories.HeroRepository;
 
+import Services.HeroService;
+
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/heroes")
 public class HeroController {
 
 	Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private HeroRepository service;
-
-	@GetMapping("/heros") // example http://localhost:8080/api/heros?page=0&size=10
+	private HeroService service;
+	
+	@GetMapping // example http://localhost:8080/heroes?page=0&size=10
 	public ResponseEntity<?> getHeros(Pageable pageable) {
-		Page<HeroEntity> page = service.findAll(pageable);
-
-		return ResponseEntity.status(HttpStatus.OK).body(page.getContent());
+		return ResponseEntity.status(HttpStatus.OK).body(service.findAll(pageable));
 
 	}
 
-	@GetMapping("/heros/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> getHeroById(@PathVariable Long id) {
-
 		Optional<HeroEntity> optional = service.findById(id);
 		HeroEntity hero = optional.orElse(null);
 
 		return (hero != null) ? ResponseEntity.ok(hero)
 				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("Hero not found in the database");
-
 	}
 
-	@PostMapping("heros/create")
+	@PostMapping("/create")
 	public ResponseEntity<?> createHero(@RequestBody HeroEntity hero) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(this.service.save(hero));
+		return ResponseEntity.status(HttpStatus.CREATED).body(this.service.create(hero));
 
 	}
 
-	@DeleteMapping("/heros/delete/{id}")
+	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> deleteHero(@PathVariable Long id) {
 
 		Optional<HeroEntity> optional = service.findById(id);
@@ -67,36 +64,22 @@ public class HeroController {
 		if (hero == null)
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Hero not found in the database");
 
-		service.delete(hero);
+		service.delete(id);
 		return ResponseEntity.status(HttpStatus.OK).body("Successfully deleted hero with ID: " + id);
 
 	}
 
-	@PutMapping("/heros/update/{id}")
-	public ResponseEntity<?> updateHero(@RequestBody HeroEntity hero, @PathVariable Long id) {
-
-		Optional<HeroEntity> optional = this.service.findById(id);
-
-		if (optional.isEmpty())
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Hero not found in the database");
-
-		HeroEntity heroDTO = optional.get();
-
-		BeanUtils.copyProperties(hero, heroDTO, "id");
-
-		return ResponseEntity.status(HttpStatus.CREATED).body(this.service.save(heroDTO));
+	@GetMapping("/search") // http://localhost:8080/heroes/search?keyword=super&page=0&size=5
+	public ResponseEntity<?> searchHeroesByName(@RequestParam String name) {
+		
+		List<HeroEntity> heroesList = service.search(name);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(heroesList);
 	}
- 
-	@GetMapping("/heroes/search") // http://localhost:8080/api/heroes/search?keyword=super&page=0&size=5
-	public ResponseEntity<?> searchHeroesByName(@RequestParam String keyword, Pageable pageable) {
-	    
-		Page<HeroEntity> page = service.findByNameContainingIgnoreCase(keyword, pageable);
-
-	    if (page.isEmpty()) {
-	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Heroes not found in the database");
-	    }
-
-	    return ResponseEntity.ok(page.getContent());
+	
+	@PutMapping("/update/{id}")
+	public ResponseEntity<?> updateHero(@RequestBody HeroEntity hero, @PathVariable Long id) {		
+		return ResponseEntity.status(HttpStatus.CREATED).body(this.service.update(id, hero));
 	}
 
 }

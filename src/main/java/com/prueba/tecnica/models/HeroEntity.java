@@ -1,5 +1,6 @@
 package com.prueba.tecnica.models;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import jakarta.persistence.Column;
@@ -10,26 +11,37 @@ import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
+/*
+{    
+    "name": "Superman",
+    "birthDate": "1986-02-28",
+    "vulnerability": "Kriptonita"
+}
+ */
+
 @Entity
 @Table(name = "superheroes")
-@SequenceGenerator(name = "superheroes_id_seq", sequenceName = "superheroes_id_seq", initialValue = 4)
-public class HeroEntity {
+public class HeroEntity implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "superheroes_id_seq")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(unique = true)
 	private String name;
 
 	@Column(name = "birth_date")
 	private Date birthDate;
 
 	private String vulnerability;
-	
+
 	public Long getId() {
 		return id;
-	}	
+	}
 
 	public String getName() {
 		return name;
@@ -53,6 +65,16 @@ public class HeroEntity {
 
 	public void setVulnerability(String vulnerability) {
 		this.vulnerability = vulnerability;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return "HeroEntity [id=" + id + ", name=" + name + ", birthDate=" + birthDate + ", vulnerability="
+				+ vulnerability + "]";
 	}
 
 }
