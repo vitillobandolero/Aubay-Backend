@@ -3,12 +3,12 @@ package com.prueba.tecnica.models;
 import java.io.Serializable;
 import java.sql.Date;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 /*
@@ -28,15 +28,19 @@ public class HeroEntity implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@Schema(description = "Identificador clave primaria héroes numérico")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Schema(example = "Spiderman", description = "Nombre del superhéroe")
 	private String name;
 
+	@Schema(example = "2003-08-04", description = "Fecha de nacimiento del superhéroe")
 	@Column(name = "birth_date")
 	private Date birthDate;
 
+	@Schema(example = "Insecticida", description = "Vulnerabilidad del superhéroe")
 	private String vulnerability;
 
 	public HeroEntity() {

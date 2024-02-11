@@ -10,6 +10,6 @@ import com.prueba.tecnica.models.HeroEntity;
 @Repository
 public interface HeroRepository extends JpaRepository<HeroEntity, Long> {
 
-	List<HeroEntity> findByNameContainingIgnoreCase(String name);
+	List<HeroEntity> findByNameContainingIgnoreCase(String keyword);
 
 }

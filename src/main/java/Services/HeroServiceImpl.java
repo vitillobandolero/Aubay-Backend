@@ -54,8 +54,8 @@ public class HeroServiceImpl implements HeroService{
 	}
 	
 	
-	public List<HeroEntity> search(String name) {
-		return repo.findByNameContainingIgnoreCase(name);
+	public List<HeroEntity> search(String keyword) {
+		return repo.findByNameContainingIgnoreCase(keyword);
 	}
 
 }

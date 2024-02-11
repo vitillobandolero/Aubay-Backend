@@ -34,7 +34,7 @@ public class HeroControllerTest {
 		List<HeroEntity> mockHeroes = Collections.singletonList(new HeroEntity());
 		when(heroService.findAll(any(Pageable.class))).thenReturn(Page.empty());
 
-		ResponseEntity<?> response = heroController.getHeros(Pageable.unpaged());
+		ResponseEntity<?> response = heroController.findAll(Pageable.unpaged());
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
