@@ -39,6 +39,16 @@ public class HeroEntity implements Serializable {
 
 	private String vulnerability;
 
+	public HeroEntity() {
+	}
+
+	public HeroEntity(Long id, String name, Date birthDate, String vulnerability) {
+		this.id = id;
+		this.name = name;
+		this.birthDate = birthDate;
+		this.vulnerability = vulnerability;
+	}
+
 	public Long getId() {
 		return id;
 	}

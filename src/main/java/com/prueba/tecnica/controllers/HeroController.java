@@ -30,9 +30,13 @@ import Services.HeroService;
 public class HeroController {
 
 	Logger log = LoggerFactory.getLogger(this.getClass());
-
-	@Autowired
+	
 	private HeroService service;
+	
+	public HeroController(HeroService service) {
+        this.service = service;
+    }
+
 	
 	@GetMapping // example http://localhost:8080/heroes?page=0&size=10
 	public ResponseEntity<?> getHeros(Pageable pageable) {
@@ -62,7 +66,7 @@ public class HeroController {
 		HeroEntity hero = optional.orElse(null);
 
 		if (hero == null)
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Hero not found in the database");
+			return ResponseEntity.status(HttpStatus.OK).body("Hero not found in the database");
 
 		service.delete(id);
 		return ResponseEntity.status(HttpStatus.OK).body("Successfully deleted hero with ID: " + id);
