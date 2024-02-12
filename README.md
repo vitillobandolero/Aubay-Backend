@@ -11,12 +11,10 @@ Documentación con OpenAPI:
   
   Para importar las pruebas de manera automatica en Postman -> http://localhost:8080/v3/api-docs
 
-  Ejemplo de body para las pruebas:    
+  Ejemplo de body para las pruebas:                                        
+                                    
                                     {    
                                     "name": "Superman",
-                                    
-                                    "birthDate": "1986-02-28",
-                                    
-                                    "vulnerability": "Kriptonita"
-                                    
+                                    "birthDate": "1986-02-28",                                    
+                                    "vulnerability": "Kriptonita"                                    
                                     }  
