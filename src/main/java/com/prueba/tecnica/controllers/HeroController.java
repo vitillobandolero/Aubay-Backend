@@ -35,9 +35,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/heroes")
+@RequestMapping("/api/heroes")
 @Tag(name = "Heroes", description = "Superheroes API REST with CRUD operations")
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class HeroController {
 
 	Logger log = LoggerFactory.getLogger(this.getClass());
