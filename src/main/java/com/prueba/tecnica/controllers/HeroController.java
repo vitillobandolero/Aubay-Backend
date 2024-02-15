@@ -79,7 +79,8 @@ public class HeroController {
 
 	@Operation(summary = "create a Hero", description = "Saves the record of a superhero in the database")
 	@PostMapping("/create")
-	public ResponseEntity<?> createHero(@Valid @RequestBody HeroEntity hero) {
+	public ResponseEntity<?> createHero(@Valid @RequestBody HeroEntity hero, BindingResult result) {
+		if(result.hasErrors()) return validate(result);
 		return ResponseEntity.status(HttpStatus.CREATED).body(this.service.create(hero));
 
 	}
