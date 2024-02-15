@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
 
 /*
 {    
@@ -34,6 +35,7 @@ public class HeroEntity implements Serializable {
 	private Long id;
 
 	@Schema(example = "Spiderman", description = "Nombre del superhéroe")
+	@NotEmpty
 	private String name;
 
 	@Schema(example = "2003-08-04", description = "Fecha de nacimiento del superhéroe")
@@ -41,6 +43,7 @@ public class HeroEntity implements Serializable {
 	private Date birthDate;
 
 	@Schema(example = "Insecticida", description = "Vulnerabilidad del superhéroe")
+	@NotEmpty
 	private String vulnerability;
 
 	public HeroEntity() {
