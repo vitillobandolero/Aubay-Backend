@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 
 import com.prueba.tecnica.models.HeroEntity;
 
@@ -30,7 +31,7 @@ public class HeroControllerTest {
 
 	@Test
 	public void getHeros() {
-		
+
 		List<HeroEntity> mockHeroes = Collections.singletonList(new HeroEntity());
 		when(heroService.findAll(any(Pageable.class))).thenReturn(Page.empty());
 
@@ -50,7 +51,7 @@ public class HeroControllerTest {
 
 	@Test
 	public void getHeroByIdNotFound() {
-		
+
 		when(heroService.findById(anyLong())).thenReturn(Optional.empty());
 
 		ResponseEntity<?> response = heroController.getHeroById(1L);
@@ -60,48 +61,51 @@ public class HeroControllerTest {
 
 	@Test
 	public void createHero() {
-		
+
 		HeroEntity heroToCreate = new HeroEntity();
 		when(heroService.create(any())).thenReturn(heroToCreate);
 
-		ResponseEntity<?> response = heroController.createHero(heroToCreate);
-		
+		BindingResult mockBindingResult = mock(BindingResult.class);
+		when(mockBindingResult.hasErrors()).thenReturn(true);
+
+		ResponseEntity<?> response = heroController.createHero(heroToCreate, mockBindingResult);
+
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 		assertEquals(heroToCreate, response.getBody());
 	}
 
 	@Test
 	public void updateHero() {
-		
+
 		Long heroId = 1L;
 		HeroEntity updatedHero = new HeroEntity();
 		when(heroService.update(eq(heroId), any())).thenReturn(updatedHero);
 
 		ResponseEntity<?> response = heroController.updateHero(updatedHero, heroId);
-		
+
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 		assertEquals(updatedHero, response.getBody());
 	}
 
 	@Test
 	public void deleteHero() {
-		
+
 		// Configurar el servicio para no devolver nada cuando se llame a delete
-	    doNothing().when(heroService).delete(anyLong());
+		doNothing().when(heroService).delete(anyLong());
 
-	    // Llamar al método que estás probando
-	    ResponseEntity<?> response = heroController.deleteHero(1L);
+		// Llamar al método que estás probando
+		ResponseEntity<?> response = heroController.deleteHero(1L);
 
-	    // Imprimir el cuerpo de la respuesta para obtener más información
-	    System.out.println("Response Body: " + response.getBody());
+		// Imprimir el cuerpo de la respuesta para obtener más información
+		System.out.println("Response Body: " + response.getBody());
 
-	    // Verificar que la respuesta sea un HttpStatus OK
-	    assertEquals(HttpStatus.OK, response.getStatusCode());
+		// Verificar que la respuesta sea un HttpStatus OK
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 
 	@Test
 	public void searchHeroesByName() {
-		
+
 		String keyword = "super";
 		List<HeroEntity> mockHeroes = Collections.singletonList(new HeroEntity());
 		when(heroService.search(anyString())).thenReturn(mockHeroes);
